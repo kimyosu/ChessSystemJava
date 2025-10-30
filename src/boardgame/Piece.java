@@ -1,6 +1,7 @@
 package boardgame;
 
 public class Piece {
+    //protected para que as subclasses possam acessar  e outras classes do pacote boardgame também possam acessar
     protected Position position;
     private Board board;
 
