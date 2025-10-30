@@ -26,4 +26,12 @@ public class Board {
     public void setRows(int rows) {
         this.rows = rows;
     }
+
+    public Piece piece(int row, int column) { //método para acessar a peça em uma posição específica
+        return pieces[row][column]; //retorna a peça na posição especificada
+    }
+
+    public Piece piece(Position position) { //método para acessar a peça usando um objeto Position
+        return pieces[position.getRow()][position.getColumn()]; //retorna a peça na posição especificada
+    }
 }
