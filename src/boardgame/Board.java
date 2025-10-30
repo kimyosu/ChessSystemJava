@@ -34,4 +34,9 @@ public class Board {
     public Piece piece(Position position) { //método para acessar a peça usando um objeto Position
         return pieces[position.getRow()][position.getColumn()]; //retorna a peça na posição especificada
     }
+    public void placePiece(Piece piece, Position position){ //método para colocar uma peça no tabuleiro
+        pieces[position.getRow()][position.getColumn()] = piece; //coloca a peça na posição especificada
+        //pieces é a matriz de peças do tabuleiro(declarado no começo da classe)
+        piece.position = position; //atualiza a posição da peça
+    }
 }
