@@ -63,7 +63,7 @@ public class Board {
 
     public Boolean thereIsAPiece(Position position) {
         //verificação defensiva para garantir que a posição está dentro dos limites do tabuleiro
-        if (positionExists(position)) throw new BoardException("Position not on the board");
+        if (!positionExists(position)) throw new BoardException("Position not on the board");
         //piece é o método que retorna a peça na posição especificada
         return piece(position) != null;  //caso haja uma peça na posição, retorna true
     }

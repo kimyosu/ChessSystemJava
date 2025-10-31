@@ -22,9 +22,15 @@ public class ChessMatch {
         return mat;
     }
 
+    //Método para planejar uma nova peça no tabuleiro
+    private void placeNewPiece(char column, int row, ChessPiece piece){ //Método para planejar uma nova peça
+        board.placePiece(piece, new ChessPosition(row, column).toPosition());
+        //.ToPosition() retorna um Position
+
+    }
     private void initialSetup(){ //Método para configurar as peças iniciais no tabuleiro
-        board.placePiece(new Rook(board, Color.WHITE), new Position(2, 1));
-        board.placePiece(new King(board, Color.BLACK), new Position(0, 4));
-        board.placePiece(new King(board, Color.WHITE), new Position(7, 4));
+        placeNewPiece( 'b', 6, new Rook(board, Color.WHITE));
+        placeNewPiece('e', 8, new King(board, Color.BLACK));
+        placeNewPiece('e', 1, new King(board, Color.WHITE));
     }
 }
