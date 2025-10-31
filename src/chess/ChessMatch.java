@@ -1,6 +1,7 @@
 package chess;
 
 import boardgame.Board;
+import boardgame.Piece;
 import boardgame.Position;
 import chess.pieces.King;
 import chess.pieces.Rook;
@@ -20,6 +21,26 @@ public class ChessMatch {
             }
         }
         return mat;
+    }
+
+    public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition){
+        Position source = sourcePosition.toPosition();
+        Position target = targetPosition.toPosition();
+        validateSourcePosition(source);
+        Piece capturedPiece = makeMove(source, target);
+        return (ChessPiece) capturedPiece;
+    }
+
+    private void validateSourcePosition(Position position) {
+        if (!board.thereIsAPiece(position)) throw new ChessException("There is no piece on source position");
+    }
+
+    private Piece makeMove(Position source, Position target) {
+        Piece p = board.removePiece(source); //Retira a peça na posição inicial
+        Piece capturedPiece = board.removePiece(target); //Tiramos a possivel peça que estava na posição de destino
+            //da peça movida
+        board.placePiece(p, target); //Movemos a peça ate a Position(posição) de destino
+        return capturedPiece;
     }
 
     //Método para planejar uma nova peça no tabuleiro
