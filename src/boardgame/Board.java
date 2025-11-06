@@ -45,11 +45,10 @@ public class Board {
         piece.position = position; //atualiza a posição da peça
     }
 
-    public Piece removePiece(Position position){
-        if (!positionExists(position)) throw  new BoardException("Position not on the board");
-        if (piece(position) == null){
-            return null;
-        }
+    public Piece removePiece(Position position) {
+        if (!positionExists(position)) throw new BoardException("Position not on the board");
+        if (piece(position) == null) return null;
+
         Piece aux = piece(position);
         aux.position = null;
         pieces[position.getRow()][position.getColumn()] = null;
@@ -71,7 +70,7 @@ public class Board {
     public Boolean positionExists(Position position) {
         return positionExists(position.getRow(), position.getColumn());
     }
-
+    //método para verificar se há uma peça em uma posição específica
     public Boolean thereIsAPiece(Position position) {
         //verificação defensiva para garantir que a posição está dentro dos limites do tabuleiro
         if (!positionExists(position)) throw new BoardException("Position not on the board");

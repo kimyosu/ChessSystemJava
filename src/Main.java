@@ -27,10 +27,7 @@ public class Main {
                 ChessPosition target = UI.readChessPosition(scanner);
 
                 ChessPiece capturedPiece = chessMatch.performChessMove(source, target);
-            }catch (ChessException e){
-                System.out.println(e.getMessage());
-                scanner.nextLine();
-            }catch (InputMismatchException e){
+            }catch (ChessException | InputMismatchException e){
                 System.out.println(e.getMessage());
                 scanner.nextLine();
             }

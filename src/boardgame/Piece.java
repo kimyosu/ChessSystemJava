@@ -16,10 +16,12 @@ public abstract class Piece {
 
     public abstract boolean[][] possibleMoves();
 
-    public boolean possibleMove(){
+    public boolean possibleMove(Position position){
+        //Verifica se a peça pode se mover para a posição especificada
         return possibleMoves()[position.getRow()][position.getColumn()];
     }
-    public boolean isThereAnyPossibleMove(){
+
+    public boolean isThereAnyPossibleMove(){ //Checa se existe algum movimento possivel
         boolean[][] math = possibleMoves();
         for (int i = 0; i < math.length; i++) {
             for (int j = 0; j < math.length; j++) {
