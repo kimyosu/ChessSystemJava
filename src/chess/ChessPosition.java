@@ -38,7 +38,7 @@ public class ChessPosition {
 
     //converte a posição da matriz para a posição de xadrez
     protected static ChessPosition fromPosition(Position position) {
-        return new ChessPosition(8 - position.getRow(), (char) ('a' + position.getColumn()));
+        return new ChessPosition(8 - position.getRow(), (char)('a' + position.getColumn()));
         /*
         "8 - position.getRow()" converte a linha da matriz (0 a 7) para a linha de xadrez (1 a 8)
             Exemplo: 8 - 6 = 2 (linha 6 da matriz corresponde à linha 2 de xadrez)

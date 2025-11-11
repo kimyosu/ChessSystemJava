@@ -82,7 +82,7 @@ public class Rook extends ChessPiece {
         }
         //Quando acabar o while, verifica se tem uma peça adversária para poder capturar
         if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-            mat[p.getColumn()][p.getColumn()] = true;
+            mat[p.getRow()][p.getColumn()] = true;
         }
         /*
         .positionExists = Retorna se existe uma peça especificando uma Position
@@ -96,7 +96,7 @@ public class Rook extends ChessPiece {
         Exemplo: se estivermos c(3) e queremos saber o que tem ao lado esquerdo, iremos diminuindo por 1
          */
         while (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p)) {
-            mat[p.getColumn()][p.getColumn()] = true; //Marca como movimento possivel
+            mat[p.getRow()][p.getColumn()] = true; //Marca como movimento possivel
             p.setColumn(p.getColumn() + 1);
         }
         //Quando acabar o while, verifica se tem uma peça adversária para poder capturar

@@ -15,6 +15,7 @@ public class ChessMatch {
     private int turn;
     private Color currentPlayer;
     private Board board;
+    private boolean check;
 
     public ChessMatch() {
         board = new Board(8, 8);
@@ -26,6 +27,10 @@ public class ChessMatch {
 
     public int getTurn() {
         return turn;
+    }
+
+    public boolean getCheck() {
+        return check;
     }
 
     public Color getCurrentPlayer() {
@@ -50,6 +55,14 @@ public class ChessMatch {
         validateSourcePosition(source);
         validateTargetPosition(source, target);
         Piece capturedPiece = makeMove(source, target);
+        if (testCheck(currentPlayer)) {
+            undoMove(source, target, capturedPiece);
+            throw new ChessException("You can't put yourself in check");
+        }
+        /*Caso o inimigo esteja em xeque, check vai ser true, caso contrario vai ser false
+        opponent retorna a cor contraria, se eu passar branco ele retorna preto, currentPlayer = player turno atual
+         */
+        check = (testCheck(opponent(currentPlayer))) ? true : false;
         nextTurn();
         return (ChessPiece) capturedPiece;
     }
@@ -85,11 +98,74 @@ public class ChessMatch {
         Piece capturedPiece = board.removePiece(target); //Tiramos a possivel peça que estava na posição de destino
         //da peça movida
         board.placePiece(p, target); //Movemos a peça ate a Position(posição) de destino
-        if (capturedPiece != null){
+        if (capturedPiece != null) {
             piecesOnTheBoard.remove(capturedPiece);
             capturedPieces.add(capturedPiece);
         }
         return capturedPiece;
+    }
+
+    //Método para desfazer os movimentos
+    public void undoMove(Position source, Position target, Piece capturedPiece) {
+        //Remove a peça onde estava
+        Piece p = board.removePiece(target);
+        //Coloca a peça onde estava
+        board.placePiece(p, source);
+        if (capturedPiece != null) {//Se a peça foi capturada
+            board.placePiece(capturedPiece, target); //Coloque a peça de volta onde estava
+            capturedPieces.remove(capturedPiece);
+            piecesOnTheBoard.add(capturedPiece);
+        }
+    }
+
+    private Color opponent(Color color) {
+        return (color == Color.WHITE ? Color.BLACK : Color.WHITE);
+        //Caso color for igual a WHITE retorne Color.BLACK, caso contrario retorne Color.WHITE
+    }
+
+    private ChessPiece king(Color color) {
+        List<Piece> list = piecesOnTheBoard.stream()
+                .filter(x -> ((ChessPiece) x).getColor() == color)
+                .toList(); //Fazemos downcast já que Piece não tem uma cor e sim o ChessPiece
+        for (Piece p : list) {
+            if (p instanceof King) {
+                return ((ChessPiece) p);
+            }
+        }
+
+        throw new IllegalStateException("There is no " + color + " king on the board");
+    }
+
+    private boolean testCheck(Color color) {
+        Position kingPosition = king(color).getChessPosition().toPosition();
+        /*
+       king() = Retorna um ChessPiece
+       .getChessPosition() =  Apartir do ChessPiece do king() retornado retorna um ChessPosition, esse getChesPosition
+            Chama um método fromPosition que converte  de matriz para posição xadrez
+        .toPosition() = Apartir desse getChessPosition() chama o método .toPosition() que converte de
+            Posição xadrez para matriz
+         */
+        //Lista para guardas as peças inimigas
+        List<Piece> opponentPiece = piecesOnTheBoard.stream()
+                .filter(x -> ((ChessPiece) x).getColor() == opponent(color)).toList();
+        //opponent = Retorna a cor contraria da cor passada, exemplo, se passei a cor branca devolva a cor preta
+
+        for (Piece p : opponentPiece) {
+            boolean[][] mat = p.possibleMoves();
+            /*
+            Array de boolean, já que os movimentos possiveis
+                Indicam qual casa é true(pode ir e ser capturada) e qual casa é false(não podem ir)
+            */
+
+            /*
+            Verifica se a casas na linha do rei é true, ou seja, se a peça adversaria pode ir/capturar
+            Então significa que o rei está em xeque
+            */
+            if (mat[kingPosition.getRow()][kingPosition.getColumn()]) {
+                return true; //Retorna true, indicando que a peça está em xeque
+            }
+        }
+        return false;
     }
 
     //Método para planejar uma nova peça no tabuleiro
@@ -98,6 +174,7 @@ public class ChessMatch {
         //.ToPosition() retorna um Position
         piecesOnTheBoard.add(piece);
     }
+
 
     private void initialSetup() { //Método para configurar as peças iniciais no tabuleiro
         placeNewPiece('c', 1, new Rook(board, Color.WHITE));
